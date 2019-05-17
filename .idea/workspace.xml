@@ -14,14 +14,34 @@
       <file leaf-file-name="PyDACT.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PyDACT.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="183" column="35" lean-forward="false" selection-start-line="183" selection-start-column="35" selection-end-line="183" selection-end-column="35" />
+            <state relative-caret-position="3675">
+              <caret line="147" column="0" lean-forward="true" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
-                <element signature="e#268#416#0" expanded="false" />
-                <element signature="e#459#1601#0" expanded="false" />
-                <element signature="e#1644#2510#0" expanded="false" />
-                <element signature="e#6318#7283#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="eprConfig.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/eprConfig.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="160">
+              <caret line="45" column="23" lean-forward="false" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
+              <folding>
+                <element signature="e#0#29#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="serialSetting.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/serialSetting.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1000">
+              <caret line="40" column="19" lean-forward="false" selection-start-line="40" selection-start-column="19" selection-end-line="40" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#29#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -46,8 +66,11 @@
       <find>Push</find>
       <find>QSpacerItem</find>
       <find>button</find>
+      <find>portNa</find>
       <find>connect</find>
+      <find>Spa</find>
       <find>eprConfigTabUI</find>
+      <find>loadEprThread</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -57,6 +80,10 @@
         <option value="$PROJECT_DIR$/../Meng_Serial-Monitor/Source/Serial_monitor.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/UI.py" />
+        <option value="$PROJECT_DIR$/PyDACT/lib/serialSetting.py" />
+        <option value="$PROJECT_DIR$/lib/serialSetting.py" />
+        <option value="$PROJECT_DIR$/lib/eprConfig.py" />
+        <option value="$PROJECT_DIR$/PyDACT.py" />
       </list>
     </option>
   </component>
@@ -88,6 +115,11 @@
               <item name="PYDACT" type="b2602c69:ProjectViewProjectNode" />
               <item name="PYDACT" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="PYDACT" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PYDACT" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -99,6 +131,14 @@
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Meng_Serial-Monitor/Source/Serial_monitor.py" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\USER\Documents\GitHub\PYDACT\lib" />
+      <recent name="C:\Users\USER\Documents\GitHub\PYDACT" />
+      <recent name="C:\Users\USER\Documents\GitHub\PYDACT\PyDACT" />
+      <recent name="C:\Users\USER\Documents\GitHub\PYDACT\PyDACT\lib" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -268,10 +308,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
-            <element signature="e#268#416#0" expanded="false" />
-            <element signature="e#459#1601#0" expanded="false" />
-            <element signature="e#1644#2510#0" expanded="false" />
-            <element signature="e#6318#7283#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -282,10 +318,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
-            <element signature="e#268#416#0" expanded="false" />
-            <element signature="e#459#1601#0" expanded="false" />
-            <element signature="e#1644#2510#0" expanded="false" />
-            <element signature="e#6318#7283#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -340,16 +372,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PyDACT.py">
+    <entry file="file://$PROJECT_DIR$/lib/serialSetting.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="183" column="35" lean-forward="false" selection-start-line="183" selection-start-column="35" selection-end-line="183" selection-end-column="35" />
+        <state relative-caret-position="1000">
+          <caret line="40" column="19" lean-forward="false" selection-start-line="40" selection-start-column="19" selection-end-line="40" selection-end-column="19" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
-            <element signature="e#268#416#0" expanded="false" />
-            <element signature="e#459#1601#0" expanded="false" />
-            <element signature="e#1644#2510#0" expanded="false" />
-            <element signature="e#6318#7283#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/eprConfig.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="45" column="23" lean-forward="false" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PyDACT.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3675">
+          <caret line="147" column="0" lean-forward="true" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
