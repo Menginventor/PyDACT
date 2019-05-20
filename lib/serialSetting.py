@@ -12,8 +12,10 @@ class ComboBox(QComboBox):
 
 class serialSettingWidget(QWidget):
 
-    def __init__(self):
+    def __init__(self,serialPort):
         super(serialSettingWidget, self).__init__()
+        self.serialPort = serialPort
+        self.IsSerialConnected = False
         mainLayout = QHBoxLayout()
         self.GBox = QGroupBox("Serial Setting")
         self.portName = ComboBox()
@@ -35,6 +37,11 @@ class serialSettingWidget(QWidget):
         mainVLayout.addWidget(self.GBox)
         self.setLayout(mainVLayout)
 
+        ##
+        self.update()
+        self.serialConnectBtn.clicked.connect(self.serialConnectHandle)
+        self.serialDisconnectBtn.clicked.connect(self.serialDisconnectHandle)
+
 
     def portNameUpdate(self):
         #print('portNameUpdate')
@@ -44,3 +51,33 @@ class serialSettingWidget(QWidget):
 
         self.portName.clear()
         self.portName.addItems(listPortDescription)
+    def update(self):
+        status = self.IsSerialConnected
+        self.portName.setEnabled(not status)
+        self.buadRate.setEnabled(not status)
+        self.serialConnectBtn.setEnabled(not status)
+        self.serialDisconnectBtn.setEnabled(status)
+
+    def serialConnectHandle(self):
+        listPort = serial.tools.list_ports.comports(include_links=False)
+        portSelect = self.portName.currentText()
+        portName = [x.device for x in listPort][[x.description for x in listPort].index(portSelect)]
+
+        self.serialPort.port = portName
+
+        self.serialPort.baudrate = int(self.buadRate.currentText())
+        try:
+            self.serialPort.open()
+        except Exception as e:
+            print('Serial error',e)
+            #self.serial_error_dialog()
+            return
+        self.IsSerialConnected = True
+        self.update()
+        print('serialConnectHandle')
+
+    def serialDisconnectHandle(self):
+        self.serialPort.close()
+        self.IsSerialConnected = False
+        self.update()
+        print('serialDisconnectHandle')
