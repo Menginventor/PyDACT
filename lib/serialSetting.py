@@ -12,8 +12,9 @@ class ComboBox(QComboBox):
 
 class serialSettingWidget(QWidget):
 
-    def __init__(self,serialPort):
+    def __init__(self,serialPort,settings):
         super(serialSettingWidget, self).__init__()
+        self.settings = settings
         self.serialPort = serialPort
         self.IsSerialConnected = False
         mainLayout = QHBoxLayout()
@@ -22,6 +23,11 @@ class serialSettingWidget(QWidget):
         self.buadRate = QComboBox()
         self.portName.popupAboutToBeShown.connect(self.portNameUpdate)
         self.portNameUpdate()
+        lastConnectPort = self.settings.value('lastConnectPort', type=str)
+        listPort = [port.device for port in serial.tools.list_ports.comports(include_links=False)]
+        if lastConnectPort in listPort:
+            self.portName.setCurrentIndex(listPort.index(lastConnectPort))
+
         self.buadRate.clear()
         self.buadRate.addItems(['250000'])
         self.serialConnectBtn = QPushButton('Connect', self)
@@ -62,9 +68,7 @@ class serialSettingWidget(QWidget):
         listPort = serial.tools.list_ports.comports(include_links=False)
         portSelect = self.portName.currentText()
         portName = [x.device for x in listPort][[x.description for x in listPort].index(portSelect)]
-
         self.serialPort.port = portName
-
         self.serialPort.baudrate = int(self.buadRate.currentText())
         try:
             self.serialPort.open()
@@ -74,7 +78,7 @@ class serialSettingWidget(QWidget):
             return
         self.IsSerialConnected = True
         self.update()
-        print('serialConnectHandle')
+        self.settings.setValue('lastConnectPort', self.serialPort.port)
 
     def serialDisconnectHandle(self):
         self.serialPort.close()

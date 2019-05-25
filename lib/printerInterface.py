@@ -4,6 +4,14 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtCore import QSettings
 import sys
 import serial
+import numpy as np
+import matplotlib
+from mpl_toolkits.mplot3d import Axes3D
+matplotlib.use('QT5Agg')
+
+import matplotlib.pylab as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 
 def HommingFc(serialPort):
     serialPort.flushOutput()
@@ -84,7 +92,19 @@ class printerInterfaceUI(QWidget):
         super(printerInterfaceUI, self).__init__()
         mainVlayout = QVBoxLayout(self)
         self.homeAllBtn = QPushButton('Home All', self)
+        ####
+        data = np.array([0.7, 0.7, 0.7, 0.8, 0.9, 0.9, 1.5, 1.5, 1.5, 1.5])
+        fig = plt.figure()
+        ax1 = fig.add_subplot(111, projection='3d')
+        bins = np.arange(0.6, 1.62, 0.02)
+        n1, bins1, patches1 = ax1.hist(data, bins, alpha=0.6, density=False, cumulative=False)
+        # plot
+        self.plotWidget = FigureCanvasQTAgg(fig)
+        self.toolbar = NavigationToolbar2QT(self.plotWidget, self)
+        mainVlayout.addWidget(self.plotWidget)
+        mainVlayout.addWidget(self.toolbar)
 
+        ####
         mainVlayout.addWidget(self.homeAllBtn)
         verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
         mainVlayout.addItem(verticalSpacer)

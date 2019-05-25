@@ -95,6 +95,7 @@ class eprConfigTabUI(QWidget):
         self.eprTable.setRowCount(91)
         self.eprTable.setColumnCount(4)
         self.eprTable.setHorizontalHeaderLabels(['Name','Position','Type','Value'])
+        self.eprTable.setColumnWidth(0,250)
         mainVlayout.addWidget(self.eprTable)
         self.setLayout(mainVlayout)
         self.eprLoadBtn.clicked.connect(self.eprLoadBtnClicked)

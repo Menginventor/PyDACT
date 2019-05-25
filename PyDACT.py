@@ -8,6 +8,12 @@ import serial.tools.list_ports
 from lib.serialSetting import *
 from lib.eprConfig import *
 from lib.printerInterface import *
+import ctypes
+
+
+
+myappid = 'M Lab.PyDACT.0A' # arbitrary string
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 serialPort =  serial.Serial()
 
 
@@ -29,7 +35,7 @@ class mainWidget(QWidget):
 
     def setupUI(self):
         mainVlayout = QVBoxLayout(self)
-        self.serialSettingWidget = serialSettingWidget(serialPort)
+        self.serialSettingWidget = serialSettingWidget(serialPort,self.settings)
 
         mainVlayout.addWidget( self.serialSettingWidget)
         mainTabWidget = QTabWidget()
@@ -67,7 +73,7 @@ class mainWindow(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.setGeometry(300, 300, 500, 600)
+        self.setGeometry(300, 300, 800, 600)
         self.setWindowTitle("PyDACT")
         self.setWindowIcon(QtGui.QIcon('logo.png'))
 
@@ -94,7 +100,7 @@ class mainWindow(QMainWindow):
                 event.ignore()
 def main():
     app = QApplication(sys.argv)
-    settings = QSettings('M Lab', 'Py DACT')
+    settings = QSettings('M Lab', 'PyDACT')
     w = mainWindow(settings)
     w.show()
     sys.exit(app.exec_())
