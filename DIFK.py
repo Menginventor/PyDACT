@@ -1,3 +1,6 @@
+'''
+Delta Forward-Inverse Kinematics
+'''
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
@@ -46,13 +49,14 @@ def homoTrans(HMAT,vec):
 
     return np.matmul(HMAT, np.array([vec[0],vec[1],vec[2],1]))[0:3]
 
-def DeltaForwardKinematics(configDict,plotter = None):
-    jointPosition = np.array([configDict['zPosA'],configDict['zPosB'],configDict['zPosC']])
+def DeltaForwardKinematics(jointPosition,configDict,plotter = None):
+    #jointPosition = np.array([configDict['zPosA'],configDict['zPosB'],configDict['zPosC']])
     alpha = np.deg2rad(np.array([configDict['alphaA'], configDict['alphaB'], configDict['alphaC']]))
 
     deltaRadius = np.array([configDict['deltaRadiusA'], configDict['deltaRadiusB'], configDict['deltaRadiusC']])
     diagonalRodLength = configDict['diagonalRodLength']
-    carriagePosA = carriagePos(alpha[0],deltaRadius[0],jointPosition[0])
+    print('jointPosition',jointPosition)
+    carriagePosA = carriagePos(alpha[0],deltaRadius[0], jointPosition[0])
     carriagePosB = carriagePos(alpha[1], deltaRadius[1], jointPosition[1])
     carriagePosC = carriagePos(alpha[2], deltaRadius[2], jointPosition[2])
     ####
@@ -81,8 +85,27 @@ def DeltaForwardKinematics(configDict,plotter = None):
     plotLine(plotter,homoTrans((carriageFrameHMAT),np.array([circleX,circleY,0])),endEffectorPos,color='r')
     return endEffectorPos
 
-def kinematicRecheck(configDict,plotter = None):
-    jointPosition = np.array([configDict['zPosA'], configDict['zPosB'], configDict['zPosC']])
+def DeltaInverseKinematics(endeffectorPosition,configDict,plotter = None):
+    #jointPosition = np.array([configDict['zPosA'],configDict['zPosB'],configDict['zPosC']])
+    alpha = np.deg2rad(np.array([configDict['alphaA'], configDict['alphaB'], configDict['alphaC']]))
+
+    deltaRadius = np.array([configDict['deltaRadiusA'], configDict['deltaRadiusB'], configDict['deltaRadiusC']])
+    diagonalRodLength = configDict['diagonalRodLength']
+
+    towerPosA = carriagePos(alpha[0],deltaRadius[0],endeffectorPosition[2])
+    towerPosB = carriagePos(alpha[1], deltaRadius[1], endeffectorPosition[2])
+    towerPosC = carriagePos(alpha[2], deltaRadius[2], endeffectorPosition[2])
+    jointPosition = np.array([
+        [np.sqrt(np.square(diagonalRodLength)-np.square(LA.norm(endeffectorPosition- towerPosA)))+endeffectorPosition[2]],
+        [np.sqrt(np.square(diagonalRodLength) - np.square(LA.norm(endeffectorPosition - towerPosB))) + endeffectorPosition[2]],
+        [np.sqrt(np.square(diagonalRodLength) - np.square(LA.norm(endeffectorPosition - towerPosC))) + endeffectorPosition[2]],
+    ])
+    ####
+    #print('carriagePos',carriagePosA, carriagePosB, carriagePosC)
+    ####
+    return jointPosition
+def kinematicRecheck(jointPosition,configDict,plotter = None):
+    #jointPosition = np.array([configDict['zPosA'], configDict['zPosB'], configDict['zPosC']])
     alpha = np.deg2rad(np.array([configDict['alphaA'], configDict['alphaB'], configDict['alphaC']]))
 
     deltaRadius = np.array([configDict['deltaRadiusA'], configDict['deltaRadiusB'], configDict['deltaRadiusC']])
@@ -90,7 +113,7 @@ def kinematicRecheck(configDict,plotter = None):
     carriagePosA = carriagePos(alpha[0], deltaRadius[0], jointPosition[0])
     carriagePosB = carriagePos(alpha[1], deltaRadius[1], jointPosition[1])
     carriagePosC = carriagePos(alpha[2], deltaRadius[2], jointPosition[2])
-    endPos = DeltaForwardKinematics(configDict,plotter)
+    endPos = DeltaForwardKinematics(jointPosition,configDict,plotter)
     ####
     plotLine(plotter,endPos,carriagePosA)
     plotLine(plotter, endPos, carriagePosB)
@@ -145,9 +168,6 @@ def set_axes_equal(ax):
 if __name__ == '__main__':
     ####For test.
     configDict = {
-        'zPosA': 100.0,
-        'zPosB': 100.0,
-        'zPosC': 200.0,
         'alphaA': 210.0,
         'alphaB': 330.0,
         'alphaC': 90.0,
@@ -156,10 +176,16 @@ if __name__ == '__main__':
         'deltaRadiusC': 94.5,
         'diagonalRodLength':217
     }
+    jointPosition = np.array([100,100,200])
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.set_aspect(aspect=1)
-    kinematicRecheck(configDict,ax)
+    kinematicRecheck(jointPosition,configDict,ax)
+    endeffectorPosition = np.array([100, 0, 10])
+    jointPosition = DeltaInverseKinematics(endeffectorPosition, configDict, plotter=ax)
+
+    endeffectorPositionEst = DeltaForwardKinematics(jointPosition, configDict, plotter=ax)
+    print(endeffectorPositionEst)
     ax.set_xlabel('X Label')
     ax.set_ylabel('Y Label')
     ax.set_zlabel('Z Label')
