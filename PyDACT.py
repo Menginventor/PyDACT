@@ -32,11 +32,23 @@ class mainWidget(QWidget):
 
     def homeAllBtnClicked(self):
         print('Homing..')
-
+    def portConnectedHandle(self):
+        print('portConnectHandle')
+        buttonToEnable = [self.eprConfigTab.eprDownloadBtn,self.eprConfigTab.eprUploadBtn,
+                          self.printerInterface.homeAllBtn]
+        for btn in buttonToEnable:
+            btn.setEnabled(True)
+    def portDisconnectedHandle(self):
+        print('portDisconnectHandle')
+        buttonToDisable = [self.eprConfigTab.eprDownloadBtn,self.eprConfigTab.eprUploadBtn,
+                          self.printerInterface.homeAllBtn]
+        for btn in buttonToDisable:
+            btn.setEnabled(False)
     def setupUI(self):
         mainVlayout = QVBoxLayout(self)
         self.serialSettingWidget = serialSettingWidget(serialPort,self.settings)
-
+        self.serialSettingWidget.portConnected.connect(self.portConnectedHandle)
+        self.serialSettingWidget.portDisconnected.connect(self.portDisconnectedHandle)
         mainVlayout.addWidget( self.serialSettingWidget)
         mainTabWidget = QTabWidget()
 
@@ -64,6 +76,7 @@ class mainWidget(QWidget):
         #mainVlayout.addItem(verticalSpacer)
 
         self.setLayout(mainVlayout)
+        self.portDisconnectedHandle()
         pass
 
 class mainWindow(QMainWindow):

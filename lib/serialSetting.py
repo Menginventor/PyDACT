@@ -11,8 +11,8 @@ class ComboBox(QComboBox):
         super(ComboBox, self).showPopup()
 
 class serialSettingWidget(QWidget):
-    portConnect = pyqtSignal()
-    portDisconnect = pyqtSignal()
+    portConnected = pyqtSignal()
+    portDisconnected = pyqtSignal()
     def __init__(self,serialPort,settings):
         super(serialSettingWidget, self).__init__()
         self.settings = settings
@@ -48,8 +48,8 @@ class serialSettingWidget(QWidget):
         self.update()
         self.serialConnectBtn.clicked.connect(self.serialConnectHandle)
         self.serialDisconnectBtn.clicked.connect(self.serialDisconnectHandle)
-        self.portConnect.connect(self.portConnectHandle)
-        self.portDisconnect.connect(self.portDisConnectHandle)
+        self.portConnected.connect(self.portConnectHandle)
+        self.portDisconnected.connect(self.portDisConnectHandle)
     def portConnectHandle(self):
         pass
     def portDisConnectHandle(self):
@@ -68,7 +68,16 @@ class serialSettingWidget(QWidget):
         self.buadRate.setEnabled(not status)
         self.serialConnectBtn.setEnabled(not status)
         self.serialDisconnectBtn.setEnabled(status)
+    def serialErrorMessageBox(self,exception):
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle('Serial error!')
+        msgBox.setIcon(QMessageBox.Warning)
+        msgBox.setText("Can not open COM Port")
+        msgBox.setDetailedText(str(exception))
+        msgBox.setStandardButtons(QMessageBox.Ok)
+        msgBox.setDefaultButton(QMessageBox.Ok)
 
+        ret = msgBox.exec()
     def serialConnectHandle(self):
         listPort = serial.tools.list_ports.comports(include_links=False)
         portSelect = self.portName.currentText()
@@ -77,22 +86,14 @@ class serialSettingWidget(QWidget):
         self.serialPort.baudrate = int(self.buadRate.currentText())
         try:
             self.serialPort.open()
-        except Exception as e:
-            print('Serial error',e)
+        except Exception as exception:
+            print('Serial error',exception)
             #self.serial_error_dialog()
             #msgBox = QMessageBox.information(self, "Serial connection error", "Cannot connect to comport",'')
-            msgBox = QMessageBox()
-            msgBox.setWindowTitle('Serial error!')
-            msgBox.setIcon(QMessageBox.Warning)
-            msgBox.setText("Can not open COM Port")
-            msgBox.setDetailedText(str(e))
-            msgBox.setStandardButtons(QMessageBox.Ok)
-            msgBox.setDefaultButton(QMessageBox.Save)
-
-            ret = msgBox.exec()
+            self.serialErrorMessageBox(exception)
             return
-        self.portConnect.emit()
-        self.portDisconnect.emit()
+        self.portConnected.emit()
+
         self.IsSerialConnected = True
         self.update()
         self.settings.setValue('lastConnectPort', self.serialPort.port)
@@ -102,3 +103,4 @@ class serialSettingWidget(QWidget):
         self.IsSerialConnected = False
         self.update()
         print('serialDisconnectHandle')
+        self.portDisconnected.emit()

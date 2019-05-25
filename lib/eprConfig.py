@@ -4,10 +4,12 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtCore import QSettings
 import sys
 import serial
+import time
 
 class loadEprThread(QtCore.QThread):
     finishSignal = pyqtSignal()
-    error = False
+
+    error = None
     def __init__(self,serialPort):
         self.serialPort = serialPort
         QtCore.QThread.__init__(self)
@@ -15,16 +17,31 @@ class loadEprThread(QtCore.QThread):
 
     def __del__(self):
         self.wait()
+
     def run(self):
+        if self.serialPort.isOpen() == False:
+            print('Error,Serial port not connected')
+            #self.serialErrorMessageBox()
+            self.error = ['Error,Serial port not connected','Please connect serial port before download EEPROM']
+            self.finishSignal.emit()
+            return
         self.serialPort.flushOutput()
+
         while  self.serialPort.inWaiting() > 0:
             self.serialPort.reset_input_buffer()
 
         self.serialPort.write(b'M205\r\n')
         count = 0
         self.eprData = []
+        startTime = time.time()
         while count <91:
+            if  time.time() - startTime > 5:
+                self.error = ['Error,Serial port not responding', 'Please try again or check hardware specification.']
+                self.finishSignal.emit()
+                return
+
             if self.serialPort.inWaiting()>0:
+
                 readByte = self.serialPort.readline()
 
                 if b'\xb0' in readByte:
@@ -34,6 +51,7 @@ class loadEprThread(QtCore.QThread):
 
                 readStr = readByte.decode("utf-8")
                 if readStr.startswith('EPR:'):
+                    startTime = time.time()
                     self.eprData.append(readStr)
                     count+=1
 
@@ -87,10 +105,18 @@ class eprConfigTabUI(QWidget):
         super(eprConfigTabUI, self).__init__()
         mainVlayout = QVBoxLayout(self)
         self.serialPort = serialPort
-        self.eprLoadBtn = QPushButton('Load EEPROM', self)
-        self.eprUpdateBtn = QPushButton('Upload EEPROM', self)
-        mainVlayout.addWidget(self.eprLoadBtn)
-        mainVlayout.addWidget(self.eprUpdateBtn)
+        self.eprDownloadBtn = QPushButton('Download from EEPROM', self)
+        self.eprDownloadBtn.setMaximumSize(200,100)
+        self.eprUploadBtn = QPushButton('Upload to EEPROM', self)
+        self.eprUploadBtn.setMaximumSize(200, 100)
+        hbox1 = QHBoxLayout()
+        hbox1.addWidget(self.eprDownloadBtn)
+        #hbox1.addStretch()
+        hbox2 = QHBoxLayout()
+        hbox2.addWidget(self.eprUploadBtn)
+        #hbox2.addStretch()
+        mainVlayout.addLayout(hbox1)
+        mainVlayout.addLayout(hbox2)
         self.eprTable = QTableWidget()
         self.eprTable.setRowCount(91)
         self.eprTable.setColumnCount(4)
@@ -98,16 +124,41 @@ class eprConfigTabUI(QWidget):
         self.eprTable.setColumnWidth(0,250)
         mainVlayout.addWidget(self.eprTable)
         self.setLayout(mainVlayout)
-        self.eprLoadBtn.clicked.connect(self.eprLoadBtnClicked)
-        self.eprUpdateBtn.clicked.connect(self.eprUpdateBtnClicked)
+        self.eprDownloadBtn.clicked.connect(self.eprDownloadBtnClicked)
+        self.eprUploadBtn.clicked.connect(self.eprUploadBtnClicked)
         self.eprValDict = {}
-    def eprLoadBtnClicked(self):
-        print('eprLoadBtnClicked')
+    def eprDownloadBtnClicked(self):
+        print('eprDownloadBtnClicked')
         self.loadEprThread = loadEprThread(self.serialPort)
         self.loadEprThread.finishSignal.connect(self.eprUpdate)
         self.loadEprThread.start()
-    def eprUpdateBtnClicked(self):
-        print('eprUpdateBtnClicked')
+
+    def eprUploadBtnClicked(self):
+        print('eprUploadBtnClicked')
+        if self.serialPort.isOpen() == False:
+            print('eprUpload.error')
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle('Upload EEPROM error!')
+            msgBox.setIcon(QMessageBox.Warning)
+            msgBox.setWindowIcon(QtGui.QIcon('logo.png'))
+            msgBox.setText('Error,Serial port not connected')
+            msgBox.setInformativeText('Please connect serial port before upload EEPROM')
+            msgBox.setStandardButtons(QMessageBox.Ok)
+            msgBox.setDefaultButton(QMessageBox.Ok)
+            msgBox.exec()
+            return
+        if len(self.eprValDict) != 91:
+            print('eprUpload.error')
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle('Upload EEPROM error!')
+            msgBox.setIcon(QMessageBox.Warning)
+            msgBox.setWindowIcon(QtGui.QIcon('logo.png'))
+            msgBox.setText('Error,Invalid data in EEPROM table')
+            msgBox.setInformativeText('Nake sure you download EEPROM first or your printer might running not supported firmware')
+            msgBox.setStandardButtons(QMessageBox.Ok)
+            msgBox.setDefaultButton(QMessageBox.Ok)
+            msgBox.exec()
+            return
 
         updateEprCmd = []
         eprHasChange = False
@@ -155,12 +206,24 @@ class eprConfigTabUI(QWidget):
                 updateEprCmd.append(cmd)
 
         self.uploadEprThread = uploadEprThread(self.serialPort,updateEprCmd)
-        #self.uploadEprThread.finishSignal.connect(self.eprUpdate)
+
         self.uploadEprThread.start()
 
 
     def eprUpdate(self):
         print('eprUpdate')
+        if self.loadEprThread.error != None:
+            print('loadEprThread.error')
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle('Download EEPROM error!')
+            msgBox.setIcon(QMessageBox.Warning)
+            msgBox.setWindowIcon(QtGui.QIcon('logo.png'))
+            msgBox.setText(self.loadEprThread.error[0])
+            msgBox.setInformativeText(self.loadEprThread.error[1])
+            msgBox.setStandardButtons(QMessageBox.Ok)
+            msgBox.setDefaultButton(QMessageBox.Ok)
+            msgBox.exec()
+            return
         #print(self.loadEprThread.eprData)
         for i in range(91):
             splitStr = self.loadEprThread.eprData[i].split(' ')

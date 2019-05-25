@@ -14,21 +14,21 @@
       <file leaf-file-name="PyDACT.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PyDACT.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="76" column="27" lean-forward="false" selection-start-line="76" selection-start-column="13" selection-end-line="76" selection-end-column="27" />
+            <state relative-caret-position="425">
+              <caret line="43" column="59" lean-forward="false" selection-start-line="43" selection-start-column="59" selection-end-line="43" selection-end-column="59" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
-                <element signature="e#2146#2674#0" expanded="false" />
+                <element signature="e#2937#3465#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="printerInterface.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="printerInterface.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/printerInterface.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-750">
-              <caret line="30" column="29" lean-forward="false" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="31" />
+            <state relative-caret-position="200">
+              <caret line="14" column="18" lean-forward="false" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -36,11 +36,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="serialSetting.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="eprConfig.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/eprConfig.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1080">
+              <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#29#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="serialSetting.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/serialSetting.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="87" column="41" lean-forward="false" selection-start-line="87" selection-start-column="41" selection-end-line="87" selection-end-column="41" />
+            <state relative-caret-position="135">
+              <caret line="81" column="8" lean-forward="true" selection-start-line="81" selection-start-column="8" selection-end-line="81" selection-end-column="72" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -73,7 +85,7 @@
       <file leaf-file-name="DIFK.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DIFK.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
+            <state relative-caret-position="2846">
               <caret line="183" column="39" lean-forward="false" selection-start-line="183" selection-start-column="39" selection-end-line="183" selection-end-column="39" />
               <folding>
                 <element signature="e#41#80#0" expanded="true" />
@@ -111,7 +123,13 @@
       <find>IsSerialConnected</find>
       <find>eprValDict</find>
       <find>settings</find>
+      <find>eprUpdate</find>
+      <find>self.eprValDict</find>
     </findStrings>
+    <replaceStrings>
+      <replace>eprDownloadBtn</replace>
+      <replace>eprUploadBtn</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -124,13 +142,13 @@
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/UI.py" />
         <option value="$PROJECT_DIR$/PyDACT/lib/serialSetting.py" />
-        <option value="$PROJECT_DIR$/lib/eprConfig.py" />
-        <option value="$PROJECT_DIR$/PyDACT.py" />
         <option value="$PROJECT_DIR$/DFK.py" />
         <option value="$PROJECT_DIR$/DIK.py" />
         <option value="$PROJECT_DIR$/DIFK.py" />
-        <option value="$PROJECT_DIR$/lib/printerInterface.py" />
         <option value="$PROJECT_DIR$/lib/serialSetting.py" />
+        <option value="$PROJECT_DIR$/lib/eprConfig.py" />
+        <option value="$PROJECT_DIR$/PyDACT.py" />
+        <option value="$PROJECT_DIR$/lib/printerInterface.py" />
       </list>
     </option>
   </component>
@@ -375,7 +393,7 @@
           <caret line="52" column="0" lean-forward="false" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
-            <element signature="e#2146#2674#0" expanded="false" />
+            <element signature="e#2937#3465#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -416,7 +434,7 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
-            <element signature="e#2146#2674#0" expanded="false" />
+            <element signature="e#2937#3465#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -447,7 +465,7 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
-            <element signature="e#2146#2674#0" expanded="false" />
+            <element signature="e#2937#3465#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -458,7 +476,7 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
-            <element signature="e#2146#2674#0" expanded="false" />
+            <element signature="e#2937#3465#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -481,21 +499,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6900">
           <caret line="321" column="70" lean-forward="true" selection-start-line="321" selection-start-column="8" selection-end-line="321" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/serial/serialwin32.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="307" column="0" lean-forward="false" selection-start-line="307" selection-start-column="0" selection-end-line="307" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/serial/serialutil.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -533,26 +536,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/eprConfig.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1100">
-          <caret line="97" column="42" lean-forward="false" selection-start-line="97" selection-start-column="42" selection-end-line="97" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../OptiPy/Optipy_example.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1929">
-          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="17" selection-end-column="59" />
-          <folding>
-            <element signature="e#88#127#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/DIK.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
@@ -561,9 +544,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/matplotlib/projections/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/DIFK.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
+        <state relative-caret-position="2846">
           <caret line="183" column="39" lean-forward="false" selection-start-line="183" selection-start-column="39" selection-end-line="183" selection-end-column="39" />
           <folding>
             <element signature="e#41#80#0" expanded="true" />
@@ -581,29 +572,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/matplotlib/projections/__init__.py">
+    <entry file="file://$PROJECT_DIR$/../../OptiPy/Optipy_example.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1929">
+          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="17" selection-end-column="59" />
+          <folding>
+            <element signature="e#88#127#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/serial/serialwin32.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
-          <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <caret line="360" column="0" lean-forward="false" selection-start-line="360" selection-start-column="0" selection-end-line="360" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/serial/serialutil.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="586" column="0" lean-forward="false" selection-start-line="586" selection-start-column="0" selection-end-line="586" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PyDACT.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="76" column="27" lean-forward="false" selection-start-line="76" selection-start-column="13" selection-end-line="76" selection-end-column="27" />
+        <state relative-caret-position="425">
+          <caret line="43" column="59" lean-forward="false" selection-start-line="43" selection-start-column="59" selection-end-line="43" selection-end-column="59" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
-            <element signature="e#2146#2674#0" expanded="false" />
+            <element signature="e#2937#3465#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/printerInterface.py">
+    <entry file="file://$PROJECT_DIR$/lib/eprConfig.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-750">
-          <caret line="30" column="29" lean-forward="false" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="31" />
+        <state relative-caret-position="-1080">
+          <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
@@ -612,8 +621,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/serialSetting.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="87" column="41" lean-forward="false" selection-start-line="87" selection-start-column="41" selection-end-line="87" selection-end-column="41" />
+        <state relative-caret-position="135">
+          <caret line="81" column="8" lean-forward="true" selection-start-line="81" selection-start-column="8" selection-end-line="81" selection-end-column="72" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/printerInterface.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="14" column="18" lean-forward="false" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>

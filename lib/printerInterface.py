@@ -7,17 +7,22 @@ import serial
 import numpy as np
 
 
-import matplotlib.pylab as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
+import time
 
 def HommingFc(serialPort):
+    print('port open?:',serialPort.isOpen())
+    listPort = [x.device for x in serial.tools.list_ports.comports(include_links=False)]
+    print(listPort)
     serialPort.flushOutput()
     while serialPort.inWaiting() > 0:
         serialPort.reset_input_buffer()
     serialPort.write(b'G28\r\n')
     count = 0
+    startTime = time.time()
     while True:
+        if time.time() - startTime > 5:
+            print('timeout!')
+            return True
         if serialPort.inWaiting() > 0:
             readByte = serialPort.readline()
 
@@ -27,6 +32,11 @@ def HommingFc(serialPort):
             words = ''.join([x[0] for x in readStr.split(' ')])
             if words == 'XYZE':
                 break
+            elif 'busy' in readStr:
+                print('printer busy!')
+                print(time.time() - startTime)
+                startTime = time.time()
+    return False
 class HomingThread(QtCore.QThread):
     finishSignal = pyqtSignal()
     error = False
@@ -38,7 +48,7 @@ class HomingThread(QtCore.QThread):
     def __del__(self):
         self.wait()
     def run(self):
-        HommingFc(self.serialPort)
+        self.error = HommingFc(self.serialPort)
 
 
         self.finishSignal.emit()
@@ -103,7 +113,10 @@ class printerInterfaceUI(QWidget):
 
         self.homeAllBtn.clicked.connect(self.homeAllBtnClicked)
     def homingComplete(self):
-        print('homingComplete')
+        if self.HomingThread.error == False:
+            print('homingComplete')
+        else:
+            print('Homming Error!')
     def homeAllBtnClicked(self):
         print('homeAllBtnClicked')
         self.HomingThread = HomingThread(self.serialPort)
