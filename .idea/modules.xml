@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../Meng_Serial-Monitor/.idea/Meng_Serial-Monitor.iml" filepath="$PROJECT_DIR$/../Meng_Serial-Monitor/.idea/Meng_Serial-Monitor.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../OptiPy/.idea/OptiPy.iml" filepath="$PROJECT_DIR$/../../OptiPy/.idea/OptiPy.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/PYDACT.iml" filepath="$PROJECT_DIR$/.idea/PYDACT.iml" />
     </modules>
   </component>

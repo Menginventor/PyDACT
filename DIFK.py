@@ -96,7 +96,7 @@ def DeltaInverseKinematics(endeffectorPosition,configDict,plotter = None):
     towerPosB = carriagePos(alpha[1], deltaRadius[1], endeffectorPosition[2])
     towerPosC = carriagePos(alpha[2], deltaRadius[2], endeffectorPosition[2])
     jointPosition = np.array([
-        [np.sqrt(np.square(diagonalRodLength)-np.square(LA.norm(endeffectorPosition- towerPosA)))+endeffectorPosition[2]],
+        [np.sqrt(np.square(diagonalRodLength) - np.square(LA.norm(endeffectorPosition- towerPosA))) + endeffectorPosition[2]],
         [np.sqrt(np.square(diagonalRodLength) - np.square(LA.norm(endeffectorPosition - towerPosB))) + endeffectorPosition[2]],
         [np.sqrt(np.square(diagonalRodLength) - np.square(LA.norm(endeffectorPosition - towerPosC))) + endeffectorPosition[2]],
     ])
