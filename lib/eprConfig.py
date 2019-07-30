@@ -168,7 +168,7 @@ class eprConfigTabUI(QWidget):
             type =  self.eprTable.item(row,2).text()
             val =  self.eprTable.item(row,3).text()
             '''
-                    case 0:
+        case 0:
             if(com->hasS())
                 HAL::eprSetByte(com->P, (uint8_t)com->S);
             break;

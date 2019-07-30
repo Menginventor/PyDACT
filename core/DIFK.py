@@ -1,16 +1,19 @@
 '''
 Delta Forward-Inverse Kinematics
 '''
+
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
 import numpy as np
 from numpy import linalg as LA
+
 def carriagePos(alpha,radius,zPos):
     carriagePosX = np.multiply(np.cos(alpha),radius)
     carriagePosY = np.multiply(np.sin(alpha), radius)
     carriagePosZ = zPos
     return np.array([carriagePosX, carriagePosY, carriagePosZ])
+
 def threePointToPlane(p1,p2,p3):
     ABC = np.cross(p2 - p1, p3 - p1)
 
@@ -18,6 +21,7 @@ def threePointToPlane(p1,p2,p3):
     D = -np.dot(ABC, p1)
     plane = [ABC[0],ABC[1],ABC[2],D]
     return plane
+
 def threePointToHMAT(p1,p2,p3):
     plane = threePointToPlane(p1,p2,p3)
 
@@ -45,8 +49,8 @@ def threePointToHMAT(p1,p2,p3):
             else:
                 plane_hmat[row][col] = 0
     return plane_hmat
-def homoTrans(HMAT,vec):
 
+def homoTrans(HMAT,vec):
     return np.matmul(HMAT, np.array([vec[0],vec[1],vec[2],1]))[0:3]
 
 def DeltaForwardKinematics(jointPosition,configDict,plotter = None):
@@ -70,7 +74,7 @@ def DeltaForwardKinematics(jointPosition,configDict,plotter = None):
     points = [pointA,pointB,pointC]
     #print('point = ',points)
     mat1 = np.array([[np.multiply(-2.00,pt[0]),np.multiply(-2.00,pt[1]),-1] for pt in points ])
-    mat1_inv = LA.inv(mat1)
+    mat1_inv = LA.inv(mat1) #Y = AX , X = A^-1 Y
     matY = np.array([-np.square(pt[0])-np.square(pt[1]) for pt in points])
     matX = np.matmul(mat1_inv, matY)
     circleX = matX[0]
@@ -104,6 +108,7 @@ def DeltaInverseKinematics(endeffectorPosition,configDict,plotter = None):
     #print('carriagePos',carriagePosA, carriagePosB, carriagePosC)
     ####
     return jointPosition
+
 def kinematicRecheck(jointPosition,configDict,plotter = None):
     #jointPosition = np.array([configDict['zPosA'], configDict['zPosB'], configDict['zPosC']])
     alpha = np.deg2rad(np.array([configDict['alphaA'], configDict['alphaB'], configDict['alphaC']]))
@@ -127,6 +132,7 @@ def kinematicRecheck(jointPosition,configDict,plotter = None):
 
 def plotLine(ploter,l1,l2,color='b'):
     ploter.plot([ l1[0],l2[0]],[l1[1],l2[1]],[l1[2],l2[2]],color)
+
 def plotFrameHMAT(ploter,HMAT,length = 25):
     #print(HMAT)
     xAxis = np.array([length, 0, 0])
@@ -142,52 +148,3 @@ def plotFrameHMAT(ploter,HMAT,length = 25):
     plotLine(ploter, p0, y1, color='g')
     plotLine(ploter, p0, z1, color='b')
 
-
-def set_axes_radius(ax, origin, radius):
-    ax.set_xlim3d([origin[0] - radius, origin[0] + radius])
-    ax.set_ylim3d([origin[1] - radius, origin[1] + radius])
-    ax.set_zlim3d([origin[2] - radius, origin[2] + radius])
-def set_axes_equal(ax):
-    '''Make axes of 3D plot have equal scale so that spheres appear as spheres,
-    cubes as cubes, etc..  This is one possible solution to Matplotlib's
-    ax.set_aspect('equal') and ax.axis('equal') not working for 3D.
-
-    Input
-      ax: a matplotlib axis, e.g., as output from plt.gca().
-    '''
-
-    limits = np.array([
-        ax.get_xlim3d(),
-        ax.get_ylim3d(),
-        ax.get_zlim3d(),
-    ])
-
-    origin = np.mean(limits, axis=1)
-    radius = 0.5 * np.max(np.abs(limits[:, 1] - limits[:, 0]))
-    set_axes_radius(ax, origin, radius)
-if __name__ == '__main__':
-    ####For test.
-    configDict = {
-        'alphaA': 210.0,
-        'alphaB': 330.0,
-        'alphaC': 90.0,
-        'deltaRadiusA':94.5,
-        'deltaRadiusB': 94.5,
-        'deltaRadiusC': 94.5,
-        'diagonalRodLength':217
-    }
-    jointPosition = np.array([100,100,200])
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.set_aspect(aspect=1)
-    kinematicRecheck(jointPosition,configDict,ax)
-    endeffectorPosition = np.array([100, 0, 10])
-    jointPosition = DeltaInverseKinematics(endeffectorPosition, configDict, plotter=ax)
-    print('jointPosition',jointPosition)
-    endeffectorPositionEst = DeltaForwardKinematics(jointPosition, configDict, plotter=ax)
-    print('endeffectorPositionEst',endeffectorPositionEst)
-    ax.set_xlabel('X Label')
-    ax.set_ylabel('Y Label')
-    ax.set_zlabel('Z Label')
-    set_axes_equal(ax)
-    plt.show()
