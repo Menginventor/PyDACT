@@ -284,8 +284,7 @@ suc = send_ok(b'M323 S0\r\n')
 print_serial_buffer()
 if not suc:
     exit(0)
-planar_probe_res = planar_probe(probe_height=5,probe_radius=70,probe_num=11
-                                )
+#planar_probe_res = planar_probe(probe_height=5,probe_radius=70,probe_num=15)
 planar_probe_res = load_planar_probe()
 plane_fit_res,plane_fit_cost = plane_fit(planar_probe_res)
 plane_error = plane_fit_error(plane_fit_res,planar_probe_res)
@@ -322,7 +321,7 @@ offset_b = epr_data_dict['B_offset']
 offset_c = epr_data_dict['C_offset']
 dk_param = delta_kinematic_param.init_form_printer(diag_length, radius_a, radius_b, radius_c,
                                                    alpha_a, alpha_b, alpha_c,offset_a,offset_b,offset_c)
-
+print(dk_param)
 IK_joint = DIK(dk_param,planar_probe_res)
 FK_end = DFK(dk_param,IK_joint)
 

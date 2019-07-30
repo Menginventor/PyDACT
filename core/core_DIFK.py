@@ -37,6 +37,7 @@ class delta_kinematic_param:
         alpha_b = argv[2]
         offset_a = argv[3]
         offset_b = argv[4]
+
         return delta_kinematic_param(delta_radius, alpha_a, alpha_b,offset_a,offset_b,diag_length)
 
 
