@@ -93,6 +93,6 @@ def DFK(dkp,jointPosition):
 
     carriageHeight = -np.sqrt(np.square(dkp.diag_length)-np.square(circleR))
 
-    endEffectorPos = homoTrans((carriageFrameHMAT),np.array([circleX,circleY,carriageHeight]))
+    p_e = homoTrans((carriageFrameHMAT),np.array([circleX,circleY,carriageHeight]))  # End effector's position
 
-    return endEffectorPos
+    return p_e

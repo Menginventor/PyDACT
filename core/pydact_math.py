@@ -44,6 +44,7 @@ def plane_fit_error(plane,points):
     for i in range(points.shape[0]):
         dist.append(np.dot(plane[0:3], points[i, :]) + plane[3])
     return max(dist),min(dist)
+
 def plane_fit(points): #  points in format [[x,y,z],...]
     bounds = [(-np.pi,np.pi),(-np.pi,np.pi),(None,None)]
     # plane format in [alpha,beta,d]
