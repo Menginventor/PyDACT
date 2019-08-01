@@ -19,13 +19,14 @@ def plane_fit_cost(opt_var, points):
         dist_ssq += np.square(np.dot(plane_vec[:],points[i,:]) + d)
     return dist_ssq
 
+
 def plane_fit(points):
     sol = optimize.minimize(plane_fit_cost, x0=np.array([0,0,0]),args=points)
     print(sol)
     a_x = sol.x[0]
     a_y = sol.x[1]
     z_pos = sol.x[2]
-    return paz_plane(np.array([0,0,z_pos]),a_x,a_y)
+    return z_pos,a_x,a_y
 
 def param_est_cost(var,*argv):
     init_param = argv[0]
