@@ -1,4 +1,0 @@
-#serial
-port=COM8
-buad = 25000
-#
