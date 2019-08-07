@@ -6,7 +6,7 @@ Based on following assumtion.
 '''
 
 import numpy as np
-from core_v2.difk_math import *
+from App.difk_math import *
 
 
 class dk_param:  # parameter object for DIFK

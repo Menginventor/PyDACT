@@ -2,7 +2,7 @@ import serial
 import serial.tools.list_ports
 import time
 import numpy as np
-from core_v2.core_dfik import *
+from App.core_dfik import *
 import yaml
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D

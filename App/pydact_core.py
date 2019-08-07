@@ -1,4 +1,4 @@
-from core_v2.core_dfik import *
+from App.core_dfik import *
 from scipy import  optimize
 import numpy as np
 def probe_point_config(probe_height,probe_radius,probe_num):

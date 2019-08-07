@@ -1,4 +1,4 @@
-from core_v2.pydact_core import *
+from App.pydact_core import *
 from matplotlib import pyplot as plt
 import yaml
 from mpl_toolkits.mplot3d import Axes3D
