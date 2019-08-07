@@ -2,7 +2,7 @@
 Py DACT Delta Inverse - Forward Kinematics
 Based on following assumtion.
 1. All diagonal rods length are equal.
-2. All prismatic joints (AKA tower) are parallel
+2. All prismatic joints (AKA. tower) are parallel
 '''
 
 import numpy as np
@@ -84,7 +84,7 @@ class dk_param:  # parameter object for DIFK
 
 
 
-def DIK (dkp,point):
+def DIK (dkp,point):  # Delta Inverse Kinematic
     # dia_lengrh**2 = r**2 + h**2
     # h**2 = dia_lengrh**2  - r**2
     if point.shape == (3,):
@@ -110,7 +110,7 @@ def DIK (dkp,point):
     return np.array([joint_A,joint_B,joint_C])
 
 
-def DFK(dkp,jointPosition):
+def DFK(dkp,jointPosition):  # Delta Forward Kinematic
     if jointPosition.shape == (3,):
         pass
     elif jointPosition.shape[1] == 3 and  len(jointPosition.shape) == 2:

@@ -1,3 +1,7 @@
+'''
+Run this program first to get eeprom data from printer and do probing.
+You need to config serial port and connect your printer
+'''
 import serial
 import serial.tools.list_ports
 import time

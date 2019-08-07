@@ -1,6 +1,11 @@
+'''
+This is core program to finding kinematic parameter.
+
+'''
 from App.core_dfik import *
 from scipy import  optimize
 import numpy as np
+
 def probe_point_config(probe_height,probe_radius,probe_num):
     x_axis = np.linspace(-probe_radius,probe_radius,probe_num)
     y_axis = np.linspace(-probe_radius, probe_radius, probe_num)
