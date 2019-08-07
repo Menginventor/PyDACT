@@ -62,5 +62,5 @@ rot_probePoint = np.array([np.matmul(probe_plane_r_mat,probe_point[i,:])-probe_z
 
 ax.scatter(probe_point[:,0], probe_point[:,1], probe_point[:,2],color='r')
 #ax2.scatter(estPoint[:,0], estPoint[:,1], estPoint[:,2],color='b')
-ax.scatter(estPoint[:,0], estPoint[:,1], estPoint[:,2],color='g')
+ax.scatter(rot_estPoint[:,0], rot_estPoint[:,1], rot_estPoint[:,2],color='g')
 plt.show()

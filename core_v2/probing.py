@@ -107,10 +107,10 @@ def planar_probe(probe_height,probe_radius,probe_num):
     half_side = probe_radius*np.sin(np.pi/4.0)
     x_axis = np.linspace(-half_side,half_side,probe_num)
     y_axis = np.linspace(-half_side, half_side, probe_num)
-    send_ok(b'G0 Z'+str(probe_height).encode("utf-8") + b'\r\n')
+    send_ok(b'G0 Z'+str(probe_height).encode("utf-8") + b' F3600\r\n')
     res = []
     X, Y = np.meshgrid(x_axis, y_axis)
-    Z = np.zeros(X.shape)
+
     probe_num = x_axis.size*y_axis.size
     probe_count = 0
     for i_y in range(y_axis.size):
@@ -132,14 +132,16 @@ def planar_probe(probe_height,probe_radius,probe_num):
             msg += b'\r\n'
 
             send_ok(msg)
-            probe_res = z_probe()
-            # res in [x,y,z] format
-            res.append([ probe_res['X'],probe_res['Y'],probe_height-probe_res['Z-probe'] ])
-            Z[i_x,i_y] = probe_height-probe_res['Z-probe']
+            for i in range(3):
+                probe_res = z_probe()
+                # res in [x,y,z] format
+                res.append([ probe_res['X'],probe_res['Y'],probe_height-probe_res['Z-probe'] ])
+                ####
+
 
     np_res = np.array(res)
 
-    return  np_res,X,Y,Z
+    return  np_res
 
 
 def load_planar_probe():
@@ -248,16 +250,10 @@ if __name__ == '__main__':
     #
     probing = True
     if probing:
-        height_map,height_map_X,height_map_Y,height_map_Z = planar_probe(probe_height=10, probe_radius=70, probe_num=7)
+        height_map = planar_probe(probe_height=10, probe_radius=70, probe_num=7)
         np.save('probe_point.npy', height_map)
-        np.save('height_map_X.npy', height_map_X)
-        np.save('height_map_Y.npy', height_map_Y)
-        np.save('height_map_Z.npy', height_map_Z)
     else:
         height_map = np.load('probe_point.npy')
-        height_map_X = np.load('height_map_X.npy')
-        height_map_Y = np.load('height_map_Y.npy')
-        height_map_Z = np.load('height_map_Z.npy')
     #
     homing()
 
@@ -267,6 +263,3 @@ if __name__ == '__main__':
 
     np.save('probe_joint_pos.npy', joint_pos)
     ####
-    hmap = plt.contourf(height_map_X,height_map_Y,height_map_Z, cmap=plt.cm.jet)
-    cbar = plt.colorbar(hmap)
-    plt.show()

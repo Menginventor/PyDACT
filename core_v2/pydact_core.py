@@ -72,11 +72,12 @@ def param_est_2(init_param,joint_pos):
     bounds[3] = (-1000, 1000)
     bounds[4] = (-1000, 1000)
     bounds[5] = (-1000, 1000)
-    bounds[6] = (np.deg2rad(-5),np.deg2rad(5))
-    bounds[7] = (np.deg2rad(-5), np.deg2rad(5))
+    bounds[6] = (np.deg2rad(-2),np.deg2rad(2))
+    bounds[7] = (np.deg2rad(-2), np.deg2rad(2))
     print('bounds',bounds)
     method = 'Nelder-Mead'
     method = 'trust-constr'
+    method = 'SLSQP'
     sol = optimize.minimize(param_est_cost_2,bounds=bounds,x0=x0,args=(init_param,joint_pos),method=method)
 
     print(sol)
@@ -94,7 +95,7 @@ def param_est_2(init_param,joint_pos):
 
     diag_len = init_param.diag_len
     param = dk_param(radius,radius,radius,alpha_a,alpha_b,np.pi/2,offsetA,offsetB,offsetC,diag_len)
-    plane = paz_plane(np.array([0, 0, 0]), a_x, a_y)
+
     return param,(a_x, a_y),sol
 
 if __name__ == '__main__':
