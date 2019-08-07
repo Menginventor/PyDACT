@@ -3,6 +3,10 @@ import serial.tools.list_ports
 import time
 import numpy as np
 from core_v2.core_dfik import *
+import yaml
+from matplotlib import pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
 serialPort = serial.Serial()
 
 
@@ -10,11 +14,16 @@ def serial_connect(port,buad,timeout = 5):
     serialPort.port = port
     serialPort.baudrate = buad
     serialPort.open()
-    serialPort.flushInput()
+
     timeStamp = time.time()
     while True:
         if time.time() - timeStamp >= timeout:
             break
+        elif serialPort.inWaiting() > 0:
+            readByte = serialPort.readline().replace(b'\xb0', b'\xc2\xb0').replace(b'\r', b'')
+            read_str = readByte.decode("utf-8")
+            print(read_str)
+
 
 
 def ports_descrip():
@@ -39,6 +48,8 @@ def send_ok(msg,timeout = 30):  # Send and wait retunr 'ok'
             read_str = readByte.decode("utf-8")
             if 'ok' in read_str:
                 break
+            else:
+                print(read_str)
         if time.time() - startTime >= timeout:
             raise Exception('time-out!')
 
@@ -86,23 +97,21 @@ def z_probe(timeout=30):  # G30, wait for 'Z-probe'
             elif 'busy' in read_str:
                 print('busy!')
                 startTime = time.time()
+            else:
+                print(read_str)
         if time.time() - startTime >= timeout:
             raise Exception('time-out!')
 
 
 def planar_probe(probe_height,probe_radius,probe_num):
-    x_axis = np.linspace(-probe_radius,probe_radius,probe_num)
-    y_axis = np.linspace(-probe_radius, probe_radius, probe_num)
+    half_side = probe_radius*np.sin(np.pi/4.0)
+    x_axis = np.linspace(-half_side,half_side,probe_num)
+    y_axis = np.linspace(-half_side, half_side, probe_num)
     send_ok(b'G0 Z'+str(probe_height).encode("utf-8") + b'\r\n')
     res = []
     X, Y = np.meshgrid(x_axis, y_axis)
-    Z1 = np.zeros(X.shape)
-    probe_num = 0
-    for i_y in range(y_axis.size):
-        for i_x in range(x_axis.size):
-            Z1[i_y,i_x] = None
-            if np.sqrt(np.square(x_axis[i_x]) + np.square(y_axis[i_y])) <= probe_radius:
-                probe_num += 1
+    Z = np.zeros(X.shape)
+    probe_num = x_axis.size*y_axis.size
     probe_count = 0
     for i_y in range(y_axis.size):
         y = y_axis[i_y]
@@ -112,24 +121,25 @@ def planar_probe(probe_height,probe_radius,probe_num):
             range_x = range(x_axis.size-1,-1,-1)
         for i_x in range_x:
             x = x_axis[i_x]
-            if np.sqrt(np.square(x)+np.square(y)) <= probe_radius:
-                probe_count += 1
-                print('probing', probe_count, 'of', probe_num)
 
-                msg = b'G0'
-                msg += b' X' + str(x).encode("utf-8")
-                msg += b' Y' + str(y).encode("utf-8")
-                msg += b' Z' + str(probe_height).encode("utf-8")
-                msg += b'\r\n'
+            probe_count += 1
+            print('probing', probe_count, 'of', probe_num)
 
-                send_ok(msg)
-                probe_res = z_probe()
-                # res in [x,y,z] format
-                res.append([ probe_res['X'],probe_res['Y'],probe_res['Z-probe'] ])
+            msg = b'G0'
+            msg += b' X' + str(x).encode("utf-8")
+            msg += b' Y' + str(y).encode("utf-8")
+            msg += b' Z' + str(probe_height).encode("utf-8")
+            msg += b'\r\n'
+
+            send_ok(msg)
+            probe_res = z_probe()
+            # res in [x,y,z] format
+            res.append([ probe_res['X'],probe_res['Y'],probe_height-probe_res['Z-probe'] ])
+            Z[i_x,i_y] = probe_height-probe_res['Z-probe']
 
     np_res = np.array(res)
 
-    return  np_res
+    return  np_res,X,Y,Z
 
 
 def load_planar_probe():
@@ -148,7 +158,6 @@ class eprItem():
 
 
 def load_epr():
-    print('load epr')
     serialPort.write(b'M205\r\n')
     eprData =[]
     startTime = time.time()
@@ -183,7 +192,7 @@ def load_epr():
 
     return eprData
 
-def load_epr_kinematic_param():
+def load_epr_param():
     epr_addr_dict = {
         'step_per_mm': 11,
         'diag_length': 881,
@@ -209,19 +218,9 @@ def load_epr_kinematic_param():
                 break
         else:
             print('cannot find epr', epr_key)
-    print(epr_data_dict)
-    diag_len = epr_data_dict['diag_length']
-    ra = epr_data_dict['horiz_radius'] + epr_data_dict['A_radius']
-    rb = epr_data_dict['horiz_radius'] + epr_data_dict['B_radius']
-    rc = epr_data_dict['horiz_radius'] + epr_data_dict['C_radius']
-    aa = np.deg2rad(epr_data_dict['A_alpha'])
-    ab = np.deg2rad(epr_data_dict['B_alpha'])
-    ac = np.deg2rad(epr_data_dict['C_alpha'])
-    offsetA = epr_data_dict['A_offset']
-    offsetB = epr_data_dict['B_offset']
-    offsetC = epr_data_dict['C_offset']
-    loaded_param = dk_param(ra,rb,rc,aa,ab,ac,offsetA,offsetB,offsetC,diag_len)
-    return loaded_param
+    return epr_data_dict
+
+
 
 def homing():
     send_xyz(b'G28\r\n')
@@ -237,21 +236,37 @@ if __name__ == '__main__':
     buad = 250000
     print('connecting serial.')
     serial_connect(port, buad)
-    homing()
-    #
-    height_map = planar_probe(probe_height=5, probe_radius=70, probe_num=16)
-    np.save('probe_point.npy', height_map)
+    # Load epr kinematic param
+    epr_param = load_epr_param()
+    epr_kinematic_param = dict_to_dk_param(epr_param)
+    yaml.dump(epr_param, open("epr_dkp.yaml", "w"))
+    print(epr_kinematic_param)
     #
     homing()
     deactivateAutoLevel()
     disableDistortionCorr()
-    # Load epr kinematic param
-    epr_kinematic_param = load_epr_kinematic_param()
-    print(epr_kinematic_param)
-    homing()
     #
+    probing = True
+    if probing:
+        height_map,height_map_X,height_map_Y,height_map_Z = planar_probe(probe_height=10, probe_radius=70, probe_num=7)
+        np.save('probe_point.npy', height_map)
+        np.save('height_map_X.npy', height_map_X)
+        np.save('height_map_Y.npy', height_map_Y)
+        np.save('height_map_Z.npy', height_map_Z)
+    else:
+        height_map = np.load('probe_point.npy')
+        height_map_X = np.load('height_map_X.npy')
+        height_map_Y = np.load('height_map_Y.npy')
+        height_map_Z = np.load('height_map_Z.npy')
+    #
+    homing()
+
 
 
     joint_pos = DIK(epr_kinematic_param, height_map)
-    print(joint_pos)
+
     np.save('probe_joint_pos.npy', joint_pos)
+    ####
+    hmap = plt.contourf(height_map_X,height_map_Y,height_map_Z, cmap=plt.cm.jet)
+    cbar = plt.colorbar(hmap)
+    plt.show()

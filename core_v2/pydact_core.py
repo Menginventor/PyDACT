@@ -28,56 +28,7 @@ def plane_fit(points):
     z_pos = sol.x[2]
     return z_pos,a_x,a_y
 
-def param_est_cost(var,*argv):
-    init_param = argv[0]
-    joints_pos = argv[1]
-    ra = var[0]
-    rb = var[1]
-    rc = var[2]
-    aa = var[3]
-    ab = var[4]
-    ac = var[5]
-    offsetA = var[6]
-    offsetB = var[7]
-    offsetC = var[8]
-    a_x = var[9]
-    a_y = var[10]
 
-    diag_len = init_param.diag_len
-    param = dk_param(ra,rb,rc,aa,ab,ac,offsetA,offsetB,offsetC,diag_len)
-    end_pos = DFK(param, joints_pos)
-    plane = paz_plane(np.array([0, 0, 0]), a_x, a_y)
-    dist_ssq = 0
-    plane_vec = plane[0:3]
-    d = plane[3]
-    for i in range(end_pos.shape[0]):
-        dist_ssq += np.square(np.dot(plane_vec[:], end_pos[i, :]) + d)
-    print(dist_ssq)
-    return dist_ssq
-
-def param_est(init_param,joint_pos):
-    x0 = np.array([init_param.ra,init_param.rb,init_param.rc,init_param.aa,
-          init_param.ab,init_param.ac,init_param.offsetA,init_param.offsetB,init_param.offsetC,0,0])
-    sol = optimize.minimize(param_est_cost,x0=x0,args=(init_param,joint_pos),method='trust-constr')
-    ###
-    var = sol.x
-    ra = var[0]
-    rb = var[1]
-    rc = var[2]
-    aa = var[3]
-    ab = var[4]
-    ac = var[5]
-    offsetA = var[6]
-    offsetB = var[7]
-    offsetC = var[8]
-    a_x = var[9]
-    a_y = var[10]
-
-    diag_len = init_param.diag_len
-    param = dk_param(ra,rb,rc,aa,ab,ac,offsetA,offsetB,offsetC,diag_len)
-    plane = paz_plane(np.array([0, 0, 0]), a_x, a_y)
-    return param,plane,sol
-####
 def param_est_cost_2(var,*argv):
     init_param = argv[0]
     joints_pos = argv[1]
@@ -99,16 +50,36 @@ def param_est_cost_2(var,*argv):
     dist_ssq = 0
     plane_vec = plane[0:3]
     d = plane[3]
+    plane_r_mat = np.transpose(np.matmul(rmat_x(a_x), rmat_y(a_y)))
+    rot_end_pos = np.array([np.matmul(plane_r_mat, end_pos[i, :]) for i in range(end_pos.shape[0])])
     for i in range(end_pos.shape[0]):
-        dist_ssq += np.square(np.dot(plane_vec[:], end_pos[i, :]) + d)
+        dist_ssq += np.square(rot_end_pos[i,2])
     print(dist_ssq)
     return dist_ssq
-
-def param_est_2(init_param,joint_pos):
+def param_cost(init_param,joint_pos):
     x0 = np.array([init_param.ra,init_param.aa,
           init_param.ab,init_param.offsetA,init_param.offsetB,init_param.offsetC,0,0])
-    sol = optimize.minimize(param_est_cost_2,x0=x0,args=(init_param,joint_pos),method='trust-constr')
-    ###
+    return param_est_cost_2(x0,init_param,joint_pos)
+def param_est_2(init_param,joint_pos):
+    reduce_alphaA, reduce_alphaB, reduce_radius = init_param.reduce()
+    x0 = np.array([reduce_radius,reduce_alphaA,
+                   reduce_alphaB,init_param.offsetA,init_param.offsetB,init_param.offsetC,0,0])
+    bounds = [(None,None) for i in range(8)]
+
+    bounds[0] = (60,150)
+    bounds[1] = (np.deg2rad(210-10), np.deg2rad(210+10))
+    bounds[2] = (np.deg2rad(330 - 10), np.deg2rad(330 + 10))
+    bounds[3] = (-1000, 1000)
+    bounds[4] = (-1000, 1000)
+    bounds[5] = (-1000, 1000)
+    bounds[6] = (np.deg2rad(-5),np.deg2rad(5))
+    bounds[7] = (np.deg2rad(-5), np.deg2rad(5))
+    print('bounds',bounds)
+    method = 'Nelder-Mead'
+    method = 'trust-constr'
+    sol = optimize.minimize(param_est_cost_2,bounds=bounds,x0=x0,args=(init_param,joint_pos),method=method)
+
+    print(sol)
     var = sol.x
     radius = var[0]
 
